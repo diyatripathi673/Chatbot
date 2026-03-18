@@ -18,6 +18,8 @@ const useChatbot = () => {
     setMessages(newMessages);
 
   try {
+    console.log(import.meta.env.VITE_OPENROUTER_API_KEY);
+
  const response = await axios.post(
   "https://openrouter.ai/api/v1/chat/completions",
   {
@@ -25,14 +27,16 @@ const useChatbot = () => {
     messages: [{ role: "user", content: message }],
   },
   {
-    headers: {
-      Authorization: `Bearer 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`,
-      "Content-Type": "application/json",
-    },
+   headers: {
+  Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
+  "Content-Type": "application/json",
+  "HTTP-Referer": "http://localhost:3000",
+  "X-Title": "Chatbot App",
+}
   }
 );
-
   console.log("FULL RESPONSE 👉", response.data); // 🔍 debug
+console.log(import.meta.env.VITE_OPENROUTER_API_KEY);
 
   const botMessage =
     response.data?.choices?.[0]?.message?.content ||
