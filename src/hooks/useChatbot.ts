@@ -20,19 +20,19 @@ const useChatbot = () => {
   try {
     console.log(import.meta.env.VITE_OPENROUTER_API_KEY);
 
-const response = await axios.post(
+ const response = await axios.post(
   "https://openrouter.ai/api/v1/chat/completions",
   {
-    model: "stepfun/step-3.5-flash:free",
+    model: "stepfun/step-3.5-flash:free", // ✅ FREE MODEL
     messages: [{ role: "user", content: message }],
   },
   {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": window.location.origin,
-      "X-Title": "Chatbot App",
-    },
+   headers: {
+  Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
+  "Content-Type": "application/json",
+  "HTTP-Referer": "http://localhost:3000",
+  "X-Title": "Chatbot App",
+}
   }
 );
   console.log("FULL RESPONSE 👉", response.data); // 🔍 debug
@@ -45,7 +45,9 @@ console.log(import.meta.env.VITE_OPENROUTER_API_KEY);
   setMessages([...newMessages, { text: botMessage, sender: "bot" }]);
 
 } catch (error: any) {
-  console.error("Error fetching AI response:", error);
+  console.error("Error fetching AI response:", error); 
+
+
 
   let errorMessage = "❌ Something went wrong";
 
@@ -63,3 +65,5 @@ console.log(import.meta.env.VITE_OPENROUTER_API_KEY);
 };
 
 export default useChatbot;
+
+// complete
