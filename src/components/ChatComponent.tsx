@@ -1,59 +1,5 @@
-// import * as React from "react";
-// import { LuBot, LuSendHorizontal } from "react-icons/lu";
-// import useChatbot from "../hooks/useChatbot";
-// import Markdown from "react-markdown";
-// import useChatScroll from "../hooks/useChatScroll";
-
-// const ChatComponent: React.FunctionComponent = () => {
-//   const [input, setInput] = React.useState("");
-//   const { messages, sendMessage } = useChatbot();
-//   const ref = useChatScroll(messages);
-
-//   const handleSend = () => {
-//     if (input.trim()) {
-//       sendMessage(input);
-//       setInput("");
-//     }
-//   };
-//   return (
-//     <div className="flex flex-col h-[80vh] bg-white">
-//       <h2 className="p-4 font-semibold text-lg text-center bg-blue-100 flex text-blue-800 justify-center items-center gap-2">
-//         React + OpenAI Chatbot <LuBot size={25} />
-//       </h2>
-//       <div ref={ref} className="flex-1 overflow-y-auto p-4 space-y-2">
-//         {messages.map((msg, index) => (
-//           <div
-//             key={index}
-//             className={`p-3 rounded-lg max-w-xs ${
-//               msg.sender === "user"
-//                 ? "bg-blue-500 text-white ml-auto"
-//                 : "bg-gray-300 text-gray-800"
-//             }`}
-//           >
-//             <Markdown>{msg.text}</Markdown>
-//           </div>
-//         ))}
-//       </div>
-//       <div className="flex items-center p-4 bg-gray-50">
-//         <input
-//           type="text"
-//           className="flex-1 p-2 border rounded-lg focus:outline-none"
-//           placeholder="Your message here"
-//           value={input}
-//           onChange={(e) => setInput(e.target.value)}
-//         />
-//         <button onClick={handleSend} className="p-2">
-//           <LuSendHorizontal size={25} />
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ChatComponent;
-
 import * as React from "react";
-import { LuBot, LuSendHorizontal } from "react-icons/lu";
+import { LuBot, LuSendHorizontal, LuUser } from "react-icons/lu";
 import useChatbot from "../hooks/useChatbot";
 import Markdown from "react-markdown";
 import useChatScroll from "../hooks/useChatScroll";
@@ -70,7 +16,6 @@ const ChatComponent: React.FunctionComponent = () => {
     }
   };
 
-  // Handle pressing Enter to send
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -79,42 +24,69 @@ const ChatComponent: React.FunctionComponent = () => {
   };
 
   return (
-    <div className="flex flex-col h-[80vh] bg-white border rounded-lg shadow-md">
-      <h2 className="p-4 font-semibold text-lg text-center bg-blue-100 flex text-blue-800 justify-center items-center gap-2">
-        React + OpenAI Chatbot <LuBot size={25} />
-      </h2>
+    <div className="flex flex-col h-[85vh] max-w-3xl mx-auto bg-white border rounded-2xl shadow-xl overflow-hidden">
+      {/* Header */}
+      <div className="p-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center gap-2 justify-center font-semibold text-lg">
+        <LuBot size={22} />
+        AI Chat Assistant
+      </div>
 
-      {/* Chat messages */}
-      <div ref={ref} className="flex-1 overflow-y-auto p-4 space-y-2">
+      {/* Messages */}
+      <div
+        ref={ref}
+        className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50"
+      >
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`p-3 rounded-lg max-w-xs break-words ${
-              msg.sender === "user"
-                ? "bg-blue-500 text-white ml-auto"
-                : "bg-gray-300 text-gray-800"
+            className={`flex items-end gap-2 ${
+              msg.sender === "user" ? "justify-end" : "justify-start"
             }`}
           >
-            <Markdown>{msg.text}</Markdown>
+            {/* Bot Avatar */}
+            {msg.sender !== "user" && (
+              <div className="bg-gray-300 p-2 rounded-full">
+                <LuBot size={18} />
+              </div>
+            )}
+
+            {/* Message Bubble */}
+            <div
+              className={`px-4 py-2 rounded-2xl max-w-xs text-sm leading-relaxed shadow ${
+                msg.sender === "user"
+                  ? "bg-blue-500 text-white rounded-br-none"
+                  : "bg-white text-gray-800 border rounded-bl-none"
+              }`}
+            >
+              <Markdown>{msg.text}</Markdown>
+            </div>
+
+            {/* User Avatar */}
+            {msg.sender === "user" && (
+              <div className="bg-blue-500 text-white p-2 rounded-full">
+                <LuUser size={18} />
+              </div>
+            )}
           </div>
         ))}
       </div>
 
-      {/* Input area */}
-      <div className="flex items-center p-4 bg-gray-50 gap-2">
+      {/* Input */}
+      <div className="p-4 bg-white border-t flex items-end gap-2">
         <textarea
-          className="flex-1 p-2 border rounded-lg focus:outline-none resize-none"
-          placeholder="Your message here"
+          className="flex-1 p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none text-sm"
+          placeholder="Type your message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
           rows={1}
         />
+
         <button
           onClick={handleSend}
-          className="p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600 transition-colors"
+          className="p-3 bg-blue-500 rounded-xl text-white hover:bg-blue-600 transition-all shadow-md"
         >
-          <LuSendHorizontal size={25} />
+          <LuSendHorizontal size={20} />
         </button>
       </div>
     </div>
